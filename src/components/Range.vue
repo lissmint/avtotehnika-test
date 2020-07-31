@@ -1,11 +1,11 @@
 <template>
-  <div class="container">
-    <p class="current-value">{{ value }}%</p>
+  <div>
+    <p class="current-value">{{ percent }}%</p>
     <input
       class="slider"
       type="range"
-      min="0"
-      max="100"
+      :min="min"
+      :max="max"
       step="0.1"
       :value="value"
       @input="$emit('input', $event.target.value)"
@@ -27,13 +27,21 @@
 <script>
 export default {
   name: "range",
-  props: ["value"],
+  props: ["value", "min", "max"],
   data: () => ({
     btns: [25, 50, 75, 100],
   }),
+  computed: {
+    percent() {
+      return (((this.value - this.min) / (this.max - this.min)) * 100).toFixed(
+        1
+      );
+    },
+  },
   methods: {
-    setValue(value) {
-      this.$emit("input", value);
+    setValue(percent) {
+      let valueToSet = ((this.max - this.min) * percent) / 100 + this.min;
+      this.$emit("input", valueToSet);
     },
   },
 };

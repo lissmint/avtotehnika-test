@@ -2,9 +2,9 @@
   <div>
     <h1>Parent value: {{ value }}</h1>
     <h2>Input-based component:</h2>
-    <range v-model="value" />
+    <range :min="min" :max="max" v-model="value" />
     <h2>Custom component:</h2>
-    <c-range v-model="value" />
+    <c-range :min="min" :max="max" v-model="value" />
   </div>
 </template>
 <script>
@@ -19,6 +19,8 @@ export default {
   },
   data: () => ({
     value: 32.5,
+    min: 0,
+    max: 350,
   }),
 };
 </script>

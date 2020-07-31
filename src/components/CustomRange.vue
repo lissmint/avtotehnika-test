@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="current-value">{{ value }}%</p>
+    <p class="current-value">{{ percentValue }}%</p>
     <div class="slider" ref="slider" @click="onClick">
       <button
         @mousedown="onMouseDown"
@@ -14,7 +14,7 @@
         class="btn"
         v-for="(btn, i) in btns"
         :key="i"
-        @click="$emit('input', btn)"
+        @click="onBtnClick(btn)"
       >
         {{ btn }}%
       </span>
@@ -25,11 +25,19 @@
 <script>
 export default {
   name: "CustomRange",
-  props: ["value"],
+  props: ["value", "min", "max"],
   data: () => ({
     margin: 0,
     btns: [25, 50, 75, 100],
   }),
+  computed: {
+    difference() {
+      return this.max - this.min;
+    },
+    percentValue() {
+      return (((this.value - this.min) / this.difference) * 100).toFixed(1);
+    },
+  },
   watch: {
     value() {
       this.thumbMargin();
@@ -40,15 +48,25 @@ export default {
   },
   methods: {
     thumbMargin() {
-      let slider = this.$refs.slider.offsetWidth;
-      let thumb = this.$refs.thumb.offsetWidth;
-      this.margin = (this.value * (slider - thumb)) / 100 + "px";
+      if (this.value > this.max) {
+        this.$emit("input", this.max);
+      } else {
+        let slider = this.$refs.slider.offsetWidth;
+        let thumb = this.$refs.thumb.offsetWidth;
+        let percent = (this.value - this.min) / this.difference;
+        this.margin = percent * (slider - thumb) + "px";
+      }
     },
     onClick(evt) {
       let slider = this.$refs.slider;
       let sliderCoords = this.getCoords(slider);
-      let value = ((evt.pageX - sliderCoords.left) / slider.offsetWidth) * 100;
-      this.$emit("input", value.toFixed(1));
+      let percent = (evt.pageX - sliderCoords.left) / slider.offsetWidth;
+      let valueToSet = this.difference * percent + this.min;
+      this.$emit("input", valueToSet.toFixed(1));
+    },
+    onBtnClick(val) {
+      let valueToSet = (this.difference * val) / 100 + this.min;
+      this.$emit("input", valueToSet);
     },
     onMouseDown(evt) {
       let slider = this.$refs.slider;
@@ -64,8 +82,9 @@ export default {
         if (left < 0) left = 0;
         if (left > right) left = right;
 
-        let per = (left * 100) / (slider.offsetWidth - thumb.offsetWidth);
-        this.$emit("input", per.toFixed(1));
+        let percent = left / (slider.offsetWidth - thumb.offsetWidth);
+        let value = this.difference * percent + this.min;
+        this.$emit("input", value.toFixed(1));
 
         document.onmouseup = () => {
           document.onmousemove = document.onmouseup = null;
