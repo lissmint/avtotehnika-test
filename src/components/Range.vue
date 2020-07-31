@@ -77,7 +77,6 @@ export default {
   height: 30px;
   background: linear-gradient(90deg, #44af69, #fcab10, #f8333c);
   border-radius: 25px;
-  padding: 2px 3px;
   opacity: 0.7;
   -webkit-transition: 0.2s;
   transition: opacity 0.2s;

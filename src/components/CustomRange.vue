@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="current-value">{{ value }}%</p>
-    <div class="slider" ref="slider">
+    <div class="slider" ref="slider" @click="onClick">
       <button
         @mousedown="onMouseDown"
         class="slider-thumb"
@@ -43,6 +43,12 @@ export default {
       let slider = this.$refs.slider.offsetWidth;
       let thumb = this.$refs.thumb.offsetWidth;
       this.margin = (this.value * (slider - thumb)) / 100 + "px";
+    },
+    onClick(evt) {
+      let slider = this.$refs.slider;
+      let sliderCoords = this.getCoords(slider);
+      let value = ((evt.pageX - sliderCoords.left) / slider.offsetWidth) * 100;
+      this.$emit("input", value.toFixed(1));
     },
     onMouseDown(evt) {
       let slider = this.$refs.slider;
@@ -113,10 +119,10 @@ export default {
   height: 30px;
   background: linear-gradient(90deg, #44af69, #fcab10, #f8333c);
   border-radius: 25px;
-  padding: 2px 3px;
   opacity: 0.7;
   -webkit-transition: 0.2s;
   transition: opacity 0.2s;
+  padding: 0;
 
   &:hover {
     opacity: 1;
