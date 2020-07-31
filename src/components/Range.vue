@@ -43,6 +43,8 @@ export default {
 .btns {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
 }
 .current-value {
   text-align: left;
@@ -56,15 +58,15 @@ export default {
   padding: 10px 15px;
   color: white;
   border-radius: 25px;
-  margin: 30px 15px;
+  margin: 10px 15px;
   background-color: #44af69;
   text-align: center;
   font-weight: bold;
   transition: all 0.2s ease-in;
-}
 
-.btn:hover {
-  background-color: #f8333c;
+  &:hover {
+    background-color: #f8333c;
+  }
 }
 
 .slider {

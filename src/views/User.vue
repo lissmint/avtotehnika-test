@@ -1,6 +1,6 @@
 <template>
   <b-card
-    :img-height="200"
+    fluid
     :img-width="200"
     :img-src="user.avatar"
     img-alt="Card image"

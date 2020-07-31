@@ -94,7 +94,8 @@
             pill
             variant="danger"
             @click="$store.dispatch('removeUser', user.id)"
-            >Remove</b-button
+            class="font-weight-bold"
+            >&#10005;</b-button
           >
         </b-list-group-item>
       </b-list-group>
